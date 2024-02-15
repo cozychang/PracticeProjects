@@ -1,12 +1,14 @@
 server:
   port: 8088
 spring:
+  cache:
+    redis:
+      time-to-live: 1800000
   application:
     name: reggie_take_out
   redis:
     host: localhost
     port: 6379
-    password: redis
     database: 0
   datasource:
     druid:

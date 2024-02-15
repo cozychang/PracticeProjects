@@ -11,6 +11,8 @@ import com.reggie.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.Utilities;
@@ -38,6 +40,7 @@ public class SetmealController {
     private DishService dishService;
 
     @RequestMapping
+    @CacheEvict(value = "setmeal", allEntries = true)
     public R<String> save (@RequestBody SetmealDto dto){
         setmealService.saveWithDish(dto);
         return R.success("保存成功");
@@ -75,6 +78,7 @@ public class SetmealController {
     }
 
     @DeleteMapping
+    @CacheEvict(value = "setmeal", allEntries = true)
     public R<String> remove(@RequestParam List<Long> id){
         log.info("removeIds: {}", id);
         setmealService.removeWithDish(id);
@@ -84,6 +88,7 @@ public class SetmealController {
 
     //根据传过来的id和status，返回套餐
     @RequestMapping("/list")
+    @Cacheable(value = "setmeal", key = "#setmeal.categoryId + '_' + #setmeal.status")
     public R<List<Setmeal>> list(Setmeal setmeal){
         LambdaQueryWrapper<Setmeal> setmealLambdaQueryWrapper = new LambdaQueryWrapper<>();
         setmealLambdaQueryWrapper.eq(setmeal.getCategoryId() != null, Setmeal::getCategoryId, setmeal.getCategoryId());
