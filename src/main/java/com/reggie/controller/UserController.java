@@ -25,6 +25,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SpringRedisTemplate
+
+
+
+
 
     @PostMapping("/sendMsg")
     public R<String> sendMsg(@RequestBody User user, HttpSession session){
@@ -38,7 +44,7 @@ public class UserController {
             String code = ValidateCodeUtils.generateValidateCode4String(4);
 
             //将验证码保存在session，以后面验证
-            session.setAttribute("code",code);
+            //session.setAttribute("code",code);
 
             //发送短信
             //SMSUtils.sendMessage("瑞吉外卖","", phone, code);
